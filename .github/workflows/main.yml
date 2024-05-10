@@ -3,7 +3,7 @@ name: Github_Repo_Viewer
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build:
