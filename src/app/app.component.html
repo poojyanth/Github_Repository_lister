@@ -1,5 +1,103 @@
-<div class="grid h-screen place-items-center">
-  <div class="font-bold text-3xl">
-    Fyle Internship Challenge
+
+<app-navbar (userNameSearch)="onSearchUser($event)"></app-navbar>
+
+<div class="h-max place-items-center">
+
+  <div class="w-full" >
+    <ng-container *ngIf="!userData" >
+      <div class="flex flex-col justify-center items-center" style="min-height: 80vh;">
+        <h1 class="text-4xl font-semibold text-center">Search for a GitHub user to get their Repositories</h1>
+      </div>
+    </ng-container>
   </div>
+
+  <div class="grid w-full place-items-center">
+    <ng-container *ngIf="userData">
+      <!-- User Profile Section -->
+      <div class="bg-gray-100 py-8 w-full">
+        <div class="grid grid-cols-4 gap-4 mx-auto px-4">
+          <!-- Profile Picture -->
+          <div class="flex flex-col items-center justify-center">
+            <img [src]="userData.avatar_url" alt="Profile Picture" class="h-64 w-64 rounded-full">
+            <p class="text-gray-600">
+              <a [href]="userData.html_url" target="_blank" class="text-blue-500">Go to GitHub Profile</a>
+            </p>
+          </div>
+  
+          <!-- User Info -->
+          <div class="text-left col-span-3 p-4 bg-white shadow rounded-lg">
+            <h1 class="text-2xl font-bold mb-2">{{ userData.login || 'Not Available' }}</h1>
+            <!-- Bio -->
+            <p class="text-gray-600 mb-2">
+              <span class="font-bold">Bio: </span>
+              <span *ngIf="!userData.bio">Not Available</span>
+              <span *ngIf="userData.bio">{{userData.bio}}</span>
+            </p>
+            <!-- Location -->
+            <p class="text-gray-600 mb-2">
+              <span class="font-bold">Location: </span>
+              <span *ngIf="!userData.location">Not Available</span>
+              <span *ngIf="userData.location">{{ userData.location }}</span>
+            </p>
+            <!-- GitHub Link -->
+            <p class="text-gray-600 mb-2">
+              <span class="font-bold">Twitter: </span>
+              <span *ngIf="!userData.twitter_username">Not Available</span>
+              <span *ngIf="userData.twitter_username"><a [href]="userData.twitter_username" target="_blank" class="text-blue-500">{{ userData.twitter_username }}</a></span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- Repositories Section -->
+  <div *ngIf="userRepos && userRepos.length > 0" class="max-w-4xl mx-auto px-4 py-8">
+    <div class="flex justify-between items-center font-semibold mb-4">
+      <h2 class="text-2xl">Repositories</h2>
+      <span class="flex items-center">
+        <p class="mr-4">Per page:</p>
+        <select [(ngModel)]="perPage" (change)="setPerPage(perPage)" class="border border-gray-300 rounded px-2 py-1">
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="30">30</option>
+          <option value="40">40</option>
+          <option value="50">50</option>
+        </select>
+      </span>
+    </div>
+
+
+
+    <!-- Repo Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+      <div *ngFor="let repo of userRepos" class="bg-white rounded-lg shadow-md p-4">
+        <a [href]="repo.html_url" target="_blank"><h3 class="text-xl text-blue-500 font-semibold mb-2">{{ repo.name }}</h3></a>
+        <p class="text-gray-600 mb-4">{{ repo.description }}</p>
+        <div class="flex justify-between items-center" *ngIf="repo.topics">
+          <div class="flex items-center space-x-2 overflow-x-auto scrollbar-custom">            
+            <div class="flex items-center space-x-2 py-4">
+              <span *ngFor="let topic of repo.topics" class="bg-gray-200 h-max text-gray-600 px-2 py-1 rounded">{{ topic }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- Placeholder for no repositories found -->
+    <div *ngIf="userData && (!userRepos || userRepos.length === 0)" class="max-w-4xl mx-auto px-4 py-8">
+      <h2 class="text-2xl font-semibold">No repositories found for this user</h2>
+    </div>
+
+    <div *ngIf="userRepos && userRepos.length > 0" class="mx-auto px-4 py-4" style="width: 25vw;">
+      <div class="flex justify-between items-center">
+        <button (click)="setPage(page-1)" [disabled]="page === 1" class="bg-blue-500 text-white w-16 h-8 rounded">Prev</button>
+        <div class="flex items-center space-x-2">
+          <p class="text-gray-600">Page {{ page }}</p>
+          <p class="text-gray-600">of {{ totalPages }}</p>
+        </div>
+        <button (click)="setPage(page+1)" [disabled]="page === totalPages" class="bg-blue-500 text-white w-16 h-8 rounded">Next</button>
+      </div>
+    </div>
 </div>

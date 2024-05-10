@@ -1,0 +1,14 @@
+<nav class="px-8">
+    <div class="flex justify-between items-center py-4">
+      <div class="flex items-center">
+        <a href="/" style="text-decoration: none; color: black;"><h1 class="text-2xl font-bold">Github Repo Viewer</h1></a>
+      </div>
+      <div class="flex items-center">
+        <input type="text" id="search" (keyup.enter)="searchUser()" placeholder="Search for a User" class="border border-gray-300 rounded-lg p-1" [(ngModel)]="userName">
+        <button (click)="searchUser()" class="px-2">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+  
