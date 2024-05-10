@@ -7,7 +7,7 @@ import { ApiService } from './services/api.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-
+  title = 'fyle-frontend-challenge';
   userData: any;
   userRepos: any;
   page = 1;
@@ -47,8 +47,8 @@ export class AppComponent implements OnInit {
   setPerPage(perPage: number) {
     this.perPage = perPage;
     this.apiService.getRepos(this.userData.login,this.page,this.perPage).subscribe(repos => {
-      this.userRepos = repos;
       this.totalPages = Math.ceil(this.userData.public_repos / this.perPage);
+      this.userRepos = repos;
     });
   }
 
